@@ -10,11 +10,12 @@ module.exports = {
     type: "on",
     async call(client, interaction) {
             if(interaction.isChatInputCommand()) {
+                if (interaction.guildId === null) {
+                    return interaction.reply({ content: "We Currently Dont Support DM Commands",ephemeral :true });
+                }
                 const embed = new EmbedBuilder()
                 .setTitle('Command Received')
                 .setDescription(`Used By: ${interaction.user.username}\nUsed In: ${interaction.guild.name}\nCommand Used: ${interaction.commandName}`)
-
-                
                 client.channels.cache.get(process.env.cmdlogs).send({embeds: [embed]})
              
               const user = await userSchema.findOne({ userid: interaction.user.id }) ?? userDefaults({ userid: interaction.user.id })

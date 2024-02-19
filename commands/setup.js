@@ -9,7 +9,7 @@ const path = require('path');
 
 module.exports = {
     register_command: new SlashCommandBuilder()
-        .setName('Setup')
+        .setName('setup')
         .setDescription('Starts a setup with the bot'),
     async execute(client, interaction) {
         const user = await userSchema.findOne({ userid: interaction.user.id })

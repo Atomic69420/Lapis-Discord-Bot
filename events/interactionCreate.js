@@ -20,7 +20,7 @@ module.exports = {
              
               const user = await userSchema.findOne({ userid: interaction.user.id }) ?? userDefaults({ userid: interaction.user.id })
               user.save()
-              if (!user.perms) interaction.reply({ content: "You Are Not Authorized To Use This Command",ephemeral :true });
+              //if (!user.perms) interaction.reply({ content: "You Are Not Authorized To Use This Command",ephemeral :true });
               
                 if(!Object.keys(client.commands).includes(interaction.commandName)) {logger.warn(`Command ${interaction.commandName} not found or loaded`); return interaction.reply({ephemeral: true, content:`Command not found please report this!`})}
                 const command = client.commands[interaction.commandName]

@@ -10,7 +10,6 @@ module.exports = {
         .setDescription('Shows the response time of the bot'),
     async execute(client, interaction) {
         const user = await userSchema.findOne({ userid: interaction.user.id })
-        if (user.perms) {
             const startTime = Date.now();
             const response = await axios.get('https://www.google.com');
             const endTime = Date.now();
@@ -19,6 +18,5 @@ module.exports = {
             .setTitle('Pong!')
             .setDescription(`${pingTime}ms`)
              return await interaction.reply({embeds: [embed],ephemeral :true})
-        }
     }
 }

@@ -1,9 +1,9 @@
 "use strict";
 const { userSchema, userDefaults } = require("../database.js");
 const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
-const { Authflow } = require("prismarine-auth")
+const { Authflow } = require('prismarine-auth');
 const filedit = require('edit-json-file');
-const fs = require('fs');
+const fs = require('fs').promises;
 const Discord = require('discord.js')
 const path = require('path');
 
@@ -13,36 +13,49 @@ module.exports = {
         .setDescription('Starts a setup with the bot'),
     async execute(client, interaction) {
         const user = await userSchema.findOne({ userid: interaction.user.id })
-        if (user.perms) {
+        let authFiles;
+        try {
+        authFiles = await fs.readdir(`./Database/${interaction.guild.id}/Auth`)
+        } catch (err) {
+            
+        }
+        const alrlink = new EmbedBuilder()
+        .setTitle('Setup')
+        .setDescription(`You Are Already Linked Please Use /Disconnect To Unlink`)
+        try {
+        if (authFiles.length > 0) {
+            return  interaction.reply({embeds: [alrlink],ephemeral :true})
+        }
+    } catch (err) {
+        
+    }
             const dirpath = path.join(`Database/${interaction.guild.id}/`, "Setup");
             fs.mkdir(dirpath, { recursive: true }, (err) => {
-                if (err) {
-                    console.log(`error creating directory on ${dirpath}\n${err}`)
-                    return;
-                }
             })
-            const flow = new Authflow(undefined, `Database/${interaction.guild.id}/Auth`, {
-				flow: "msal",
-				authTitle: "bc98e2f6-87ff-4dfb-84d5-7b1e07e8c5ef"
+            const flow = new Authflow("", `Database/${interaction.guild.id}/Auth`, {
+				flow: "msal"
 			}, async (auethflow) => {
                 const embed = new EmbedBuilder()
                 .setTitle('Setup')
                 .setDescription(`Please Click This [Link](${auethflow.verificationUri}?otc=${auethflow.userCode}) and sign into your account.\n Do This Within <t:${Math.floor(Date.now() / 1000) + auethflow.expiresIn}:R>`)
-                let realmauthdata
-                realmauthdata = await flow.getXboxToken("https://pocket.realms.minecraft.net/");
-                fs.writeFile(`${dirpath}setup.json`, '', (err) => {
+                fs.writeFile(`./Database/${interaction.guild.id}/Setup/setup.json`, '', (err) => {
                     if (err) {
                         console.log(`error creating file on ${dirpath}\n${err}`)
                         return;
                     }
                 })
-               const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
+               interaction.reply({embeds: [embed],ephemeral :true})
+        })
+        let realmauthdata
+        realmauthdata = await flow.getXboxToken("https://pocket.realms.minecraft.net/")
+            const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
                database.set(`${interaction.guild.id}`, {
                 setup: true
             });
             database.save();
-               return await interaction.reply({embeds: [embed],ephemeral :true})
-        })
-    }
+            const donelink = new EmbedBuilder()
+            .setTitle('Setup')
+            .setDescription(`You Have Successfully Linked Your Account.\nTo Unlink You Can Use /Disconnect`)
+            return interaction.editReply({embeds: [donelink],ephemeral :true})
     }
 }

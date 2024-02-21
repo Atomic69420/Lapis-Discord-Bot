@@ -48,6 +48,24 @@ module.exports = {
         })
         let realmauthdata
         realmauthdata = await flow.getXboxToken("https://pocket.realms.minecraft.net/")
+        let xboxauthdata;
+        xboxauthdata = await flow.getXboxToken()
+
+
+        const { UserXUID: xuid } = xboxauthdata
+        const response = axios.get(`https://pocket.realms.minecraft.net/worlds`, {
+        headers: {
+            'Authorization': `XBL3.0 x=${realmauthdata.userHash};${realmauthdata.XSTSToken}`,
+            "user-agent": "MCPE/UWP",
+            "client-version": "1.20.61",
+        }})
+        const realmsowned = response.filter(realmdata => realmdata.ownerUUID === xuid);
+if (realmsowned.length === 0) {
+    const norealms = new EmbedBuilder()
+        .setTitle('Setup')
+        .setDescription(`You Do Not Own Any Realms.`)
+        return interaction.editReply({embeds: [norealms],ephemeral :true})
+}
             const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
                database.set(`${interaction.guild.id}`, {
                 setup: true

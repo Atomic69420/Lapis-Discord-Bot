@@ -24,7 +24,7 @@ module.exports = {
         } catch (err) {
             
         }
-        /*
+        
         const alrlink = new EmbedBuilder()
         .setTitle('Setup')
         .setDescription(`You Are Already Linked Please Use /Disconnect To Unlink`)
@@ -33,8 +33,7 @@ module.exports = {
             return  interaction.editReply({embeds: [alrlink],ephemeral :true})
         }
     } catch (err) {
-        */
-    //}
+    }
             const dirpath = path.join(`Database/${interaction.guild.id}/`, "Setup");
             fs.mkdir(dirpath, { recursive: true }, (err) => {
             })

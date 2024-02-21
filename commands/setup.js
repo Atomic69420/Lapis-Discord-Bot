@@ -6,6 +6,7 @@ const filedit = require('edit-json-file');
 const fs = require('fs').promises;
 const Discord = require('discord.js')
 const path = require('path');
+const axios = require('axios');
 
 module.exports = {
     register_command: new SlashCommandBuilder()
@@ -13,22 +14,27 @@ module.exports = {
         .setDescription('Starts a setup with the bot'),
     async execute(client, interaction) {
         const user = await userSchema.findOne({ userid: interaction.user.id })
+        const starting = new EmbedBuilder()
+        .setTitle('Setup')
+        .setDescription(`Starting Process...`)
+        interaction.reply({embeds: [starting],ephemeral :true})
         let authFiles;
         try {
         authFiles = await fs.readdir(`./Database/${interaction.guild.id}/Auth`)
         } catch (err) {
             
         }
+        /*
         const alrlink = new EmbedBuilder()
         .setTitle('Setup')
         .setDescription(`You Are Already Linked Please Use /Disconnect To Unlink`)
         try {
         if (authFiles.length > 0) {
-            return  interaction.reply({embeds: [alrlink],ephemeral :true})
+            return  interaction.editReply({embeds: [alrlink],ephemeral :true})
         }
     } catch (err) {
-        
-    }
+        */
+    //}
             const dirpath = path.join(`Database/${interaction.guild.id}/`, "Setup");
             fs.mkdir(dirpath, { recursive: true }, (err) => {
             })
@@ -44,29 +50,43 @@ module.exports = {
                         return;
                     }
                 })
-               interaction.reply({embeds: [embed],ephemeral :true})
+               interaction.editReply({embeds: [embed],ephemeral :true})
         })
+        const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
         let realmauthdata
         realmauthdata = await flow.getXboxToken("https://pocket.realms.minecraft.net/")
         let xboxauthdata;
         xboxauthdata = await flow.getXboxToken()
 
 
-        const { UserXUID: xuid } = xboxauthdata
-        const response = axios.get(`https://pocket.realms.minecraft.net/worlds`, {
+        const { userXUID: xuid } = xboxauthdata
+        const response = await axios.get(`https://pocket.realms.minecraft.net/worlds`, {
         headers: {
             'Authorization': `XBL3.0 x=${realmauthdata.userHash};${realmauthdata.XSTSToken}`,
             "user-agent": "MCPE/UWP",
             "client-version": "1.20.61",
         }})
-        const realmsowned = response.filter(realmdata => realmdata.ownerUUID === xuid);
+        const realmsowned = response.data.servers.filter(realmdata => realmdata.ownerUUID === xuid)
+            fs.mkdir(`Database/${interaction.guild.id}/Realm`, { recursive: true }, (err) => {
+            })
+            fs.writeFile(`./Database/${interaction.guild.id}/Realm/realm.json`, '', (err) => {
+            })
+            const databaseRealm = filedit(`./Database/${interaction.guild.id}/Realm/realm.json`);
+            let realmids = []
+            for (const realms of realmsowned) {
+                realmids.push(realms.id)
+            }
 if (realmsowned.length === 0) {
     const norealms = new EmbedBuilder()
         .setTitle('Setup')
         .setDescription(`You Do Not Own Any Realms.`)
         return interaction.editReply({embeds: [norealms],ephemeral :true})
 }
-            const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
+databaseRealm.set(`${interaction.guild.id}`, {
+    ownsrealms: true,
+    realms: realmids
+});
+databaseRealm.save()
                database.set(`${interaction.guild.id}`, {
                 setup: true
             });

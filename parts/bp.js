@@ -3,7 +3,7 @@ function createPartbp(realm, guildId) {
 	const options = {
 		host: realm.ip,
 		port: realm.port,
-        profilesFolder: `./Database/${guildId}/Auth`,
+        profilesFolder: `./Database/${guildId}/AuthBot`,
 		skipPing: true,
         conLog: process.env.NODE_ENV === "development" ? console.log : null,
 		skinData: {

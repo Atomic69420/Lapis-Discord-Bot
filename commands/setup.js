@@ -68,7 +68,7 @@ module.exports = {
         .setDescription(`Your Main Account Is Already Linked. You Can Use /disconnect To Unlink It`)
         try {
         if (authFiles.length > 0) {
-            return  interaction.editReply({embeds: [alrlink],ephemeral :true})
+            return  interaction.editReply({embeds: [alrlink],components: [],ephemeral :true})
         }
     } catch (err) {
     }
@@ -84,7 +84,7 @@ module.exports = {
                                     return;
                                 }
                             })
-                           interaction.editReply({embeds: [embed],ephemeral :true})
+                           interaction.editReply({embeds: [embed],components: [],ephemeral :true})
                     })
                     const database = filedit(`./Database/${interaction.guild.id}/Setup/setup.json`);
         let realmauthdata
@@ -119,7 +119,7 @@ if (realmsowned.length === 0) {
         fsExtra.remove(`Database/${interaction.guild.id}/Auth`)
         fsExtra.remove(`Database/${interaction.guild.id}/Realm`)
         fs.unlink(`Database/${interaction.guild.id}/Setup/setup.json`)
-        return interaction.editReply({embeds: [norealms],ephemeral :true})
+        return interaction.editReply({embeds: [norealms],components: [],ephemeral :true})
 }
 databaseRealm.set(`${interaction.guild.id}`, {
     ownsrealms: true,
@@ -142,7 +142,7 @@ databaseRealm.save()
         .setDescription(`Your Bot Account Is Already Linked. You Can Use /disconnect To Unlink It`)
         try {
         if (authFilesBot.length > 0) {
-            return interaction.editReply({embeds: [alrlink],ephemeral :true})
+            return interaction.editReply({embeds: [alrlink],components: [],ephemeral :true})
         }
     } catch (err) {
     }
@@ -161,7 +161,7 @@ databaseRealm.save()
                                     return;
                                 }
                             })
-                           interaction.editReply({embeds: [embed],ephemeral :true})
+                           interaction.editReply({embeds: [embed],components: [],ephemeral :true})
                     })
                     const database = filedit(`./Database/${interaction.guild.id}/Setup/setupBot.json`);
         let realmauthdata
@@ -175,7 +175,7 @@ databaseRealm.save()
             const donelink = new EmbedBuilder()
             .setTitle('Setup')
             .setDescription(`You Have Successfully Linked Your Bot Account.\nTo Unlink You Can Use /Disconnect`)
-            return interaction.editReply({embeds: [donelink],ephemeral :true})
+            return interaction.editReply({embeds: [donelink],components: [],ephemeral :true})
                     }
                 }
             });
@@ -183,7 +183,7 @@ databaseRealm.save()
             collector.on('end', collected => {
                 if (collected.size === 0) {
                     collector.stop()
-                    return interaction.editReply('You did not make a selection in time. Try Again');
+                    return interaction.editReply({content: "You Did Not Make A Selection Wihtin 15 Seconds", components: [],ephemeral:true});
                 }
             });
     }

@@ -1,8 +1,6 @@
 const { createClient } = require("bedrock-protocol");
-function createPartbp(realm, guildId) {
+function createPartbp(realmcode, guildId) {
 	const options = {
-		host: realm.ip,
-		port: realm.port,
         profilesFolder: `./Database/${guildId}/AuthBot`,
 		skipPing: true,
         conLog: process.env.NODE_ENV === "development" ? console.log : null,
@@ -11,12 +9,16 @@ function createPartbp(realm, guildId) {
 			DefaultInputMode: 3,
 			DeviceModel: "Xbox Series X",
 			DeviceOS: 11,
+		},
+		realms: {
+			realmInvite: realmcode
 		}
 	};
     const client = createClient(options)
     client.on("kick", (data) => {
 	});
     client.on("error", (error) => {
+		console.log(`Got error on ${guildId}\n${error}`)
 	});
     client.on("close", () => {
 	});

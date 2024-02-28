@@ -140,7 +140,6 @@ const guildId = Math.floor(interaction.guild.id / 100) * 100;
                 }
             });
         } catch (err) {
-            console.log(err)
         }
     }
 };

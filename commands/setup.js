@@ -107,8 +107,10 @@ module.exports = {
             })
             const databaseRealm = filedit(`./Database/${interaction.guild.id}/Realm/realm.json`);
             let realmids = []
+            let realmnames = []
             for (const realms of realmsowned) {
                 realmids.push(realms.id)
+                realmnames.push(realms.name)
             }
 if (realmsowned.length === 0) {
     const norealms = new EmbedBuilder()
@@ -121,7 +123,8 @@ if (realmsowned.length === 0) {
 }
 databaseRealm.set(`${interaction.guild.id}`, {
     ownsrealms: true,
-    realms: realmids
+    realmid: realmids,
+    realmnames: realmnames,
 });
 databaseRealm.save()
                database.set(`${interaction.guild.id}`, {
@@ -144,11 +147,14 @@ databaseRealm.save()
     } catch (err) {
     }
                         const flow = new Authflow("", `Database/${interaction.guild.id}/AuthBot`, {
-                            flow: "msal"
+                            flow: "live",
+                            relyingParty: "http://xboxlive.com",
+                            authTitle: "00000000441cc96b",
+                            deviceType: 'Nintendo'
                         }, async (auethflow) => {
                             const embed = new EmbedBuilder()
                             .setTitle('Setup')
-                            .setDescription(`Please Click This [Link](${auethflow.verificationUri}?otc=${auethflow.userCode}) and sign into your account.\n Do This Within <t:${Math.floor(Date.now() / 1000) + auethflow.expiresIn}:R>\nThis Is For A Bot Account Do Not Link Your Account That Owns The Realms.`)
+                            .setDescription(`Please Click This [Link](${auethflow.verification_uri}?otc=${auethflow.user_code}) and sign into your account.\n Do This Within <t:${Math.floor(Date.now() / 1000) + auethflow.expires_in}:R>\nThis Is For A Bot Account Do Not Link Your Account That Owns The Realms.`)
                             fs.writeFile(`./Database/${interaction.guild.id}/Setup/setupBot.json`, '', (err) => {
                                 if (err) {
                                     console.log(`error creating file on ${dirpath}\n${err}`)
@@ -176,6 +182,7 @@ databaseRealm.save()
     
             collector.on('end', collected => {
                 if (collected.size === 0) {
+                    collector.stop()
                     return interaction.editReply('You did not make a selection in time. Try Again');
                 }
             });

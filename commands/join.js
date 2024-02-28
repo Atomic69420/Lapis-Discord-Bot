@@ -116,9 +116,7 @@ const guildId = Math.floor(interaction.guild.id / 100) * 100;
         .setDescription(`Joining ${response.data.name}`)
         interaction.editReply({ embeds: [joining], components: [], ephemeral: true });
         const client = createPartbp(interaction.options.getString('realmcode'), interaction.guild.id)    
-        console.log(client)
         client.on("error", async (error) => {
-            console.log(xuid)
                         const errormsg = new EmbedBuilder()
         .setTitle('Realm Join')
         .setDescription(`The Bot Account Attempting To Join Ran Into A Error.\n${error}`)

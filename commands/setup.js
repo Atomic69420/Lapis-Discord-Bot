@@ -75,6 +75,15 @@ module.exports = {
                         const flow = new Authflow("", `Database/${interaction.guild.id}/Auth`, {
                             flow: "msal"
                         }, async (auethflow) => {
+                            setTimeout(() => {
+                                const timeout = new EmbedBuilder()
+        .setTitle('Setup')
+        .setDescription(`You Took Too Long! Try Again.`)
+        fsExtra.remove(`Database/${interaction.guild.id}/Auth`)
+        fsExtra.remove(`Database/${interaction.guild.id}/Realm`)
+        fs.unlink(`Database/${interaction.guild.id}/Setup/setup.json`)
+                                return  interaction.editReply({embeds: [timeout],components: [],ephemeral :true})
+                            },  900000);
                             const embed = new EmbedBuilder()
                             .setTitle('Setup')
                             .setDescription(`Please Click This [Link](${auethflow.verificationUri}?otc=${auethflow.userCode}) and sign into your account.\n Do This Within <t:${Math.floor(Date.now() / 1000) + auethflow.expiresIn}:R>`)
@@ -152,6 +161,14 @@ databaseRealm.save()
                             authTitle: "00000000441cc96b",
                             deviceType: 'Nintendo'
                         }, async (auethflow) => {
+                            setTimeout(() => {
+                                const timeout = new EmbedBuilder()
+        .setTitle('Setup')
+        .setDescription(`You Took Too Long! Try Again.`)
+        fsExtra.remove(`Database/${interaction.guild.id}/AuthBot`)
+        fs.unlink(`Database/${interaction.guild.id}/Setup/setupBot.json`)
+                                return  interaction.editReply({embeds: [timeout],components: [],ephemeral :true})
+                            },  900000);
                             const embed = new EmbedBuilder()
                             .setTitle('Setup')
                             .setDescription(`Please Click This [Link](${auethflow.verification_uri}?otc=${auethflow.user_code}) and sign into your account.\n Do This Within <t:${Math.floor(Date.now() / 1000) + auethflow.expires_in}:R>\nThis Is For A Bot Account Do Not Link Your Account That Owns The Realms.`)

@@ -14,7 +14,9 @@ module.exports = {
         .addStringOption(option =>
             option.setName('realmcode')
                 .setDescription('The Realm Code Of Your Realm')
-                .setRequired(true)),
+                .setRequired(true)
+                .setMinLength(11)
+                .setMaxLength(11)),
     async execute(client, interaction) {
         const user = await userSchema.findOne({ userid: interaction.user.id });
         let authFiles;

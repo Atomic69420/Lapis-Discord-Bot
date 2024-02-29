@@ -23,15 +23,15 @@ function createPartbp(realmcode, guildId) {
 	});
     client.on("close", () => {
 	});
-	client.on("player_list", (data) => {
+	client.on("player_list", async (data) => {
 		if (data.records.type === "add") {
 			data.records.records.forEach((packet) => {
 				if (packet.build_platform != 12 && packet.platform_chat_id.length != 0) {
-					//console.log(`[${packet.xbox_user_id}] Not on NintendoSwitch & has Platform Chat ID. [T1]`);
+					// console.log(`[${packet.xbox_user_id}] Not on NintendoSwitch & has Platform Chat ID. [T1]`);
 					client.command(`kick "${packet.xbox_user_id}" [Lapis Bot Automod]\n[Lapis Bot Automod]\nInvaild information sent. (0x3f1)`, 0)
 				}
 				if (!isValidPlatformChatId(packet.platform_chat_id) && packet.build_platform === 12) {
-					//console.log(`[${packet.xbox_user_id}] Invaild Platform Chat ID. [T2]`);
+					// console.log(`[${packet.xbox_user_id}] Invaild Platform Chat ID. [T2]`);
 					client.command(`kick "${packet.xbox_user_id}" [Lapis Bot Automod]\n[Lapis Bot Automod]\nInvaild information sent. (0x3f2)`, 0)
 				}
 				if (!packet.skin_data.skin_id.includes(packet.skin_data.play_fab_id)) {

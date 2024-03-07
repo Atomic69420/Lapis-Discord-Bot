@@ -29,6 +29,7 @@
         "mongoose": "^8.1.0",
         "prismarine-auth": "^2.4.0",
         "prompt-sync": "^4.2.0",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "antip2w-npm": "^1.0.3"
     }
 }

@@ -140,6 +140,55 @@ databaseRealm.save()
                 setup: true
             });
             database.save();
+            await fs.mkdir(`Database/${interaction.guild.id}/Config`, { recursive: true }, (err) => {
+            })
+            await fs.writeFile(`./Database/${interaction.guild.id}/Config/config.json`, '', (err) => {
+            })
+            const config = {
+                "logs": {
+                 "banlog": "",
+                 "kicklog": "",
+                 "automodlog": "",
+                 "o-c-log": "",
+                 "backuplog": "",
+                 "chatlog": "",
+                 "renamelog": ""
+                },
+                "bot": {
+                 "deviceban": "",
+                 "bd": [
+                    ""
+                 ],
+                 "skin": {
+                    "T1": "",
+                    "T2": "",
+                    "T3": "",
+                    "T4": "",
+                    "T5": "",
+                    "T6": "",
+                    "T7": "",
+                    "T8": "",
+                    "T9": "",
+                    "T10": "",
+                    "T11": ""
+                 },
+                 "device": {
+                  "T1": "",
+                  "T2": ""
+                 },
+                 "antialt": {
+                    "antialtg": "",
+                    "antialtf": "",
+                    "antialtfl": "",
+                    "antialtreq": {
+                        "antialtg": 0,
+                        "antialtf": 0,
+                        "antialtfl": 0
+                    }
+                 }
+                }
+              }            
+           await fs.writeFile(`./Database/${interaction.guild.id}/config/config.json`, JSON.stringify(config, null, 4))
             const donelink = new EmbedBuilder()
             .setTitle('Setup')
             .setDescription(`You Have Successfully Linked Your Main Account.\nTo Unlink You Can Use /Disconnect`)

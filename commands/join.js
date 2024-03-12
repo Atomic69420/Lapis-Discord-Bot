@@ -47,6 +47,9 @@ module.exports = {
             .setTitle('Realm Join')
             .setDescription(`Starting Process...`);
         await interaction.reply({ embeds: [starting], ephemeral: true });
+        try {
+        if (authFiles !== undefined || authFiles.length != 0) {
+        
 const guildId = Math.floor(interaction.guild.id / 100) * 100;
         const databaseRealm = filedit(`./Database/${interaction.guild.id}/Realm/realm.json`);
         const realmNames = databaseRealm.get(`${guildId}`)?.realmnames || [];
@@ -65,10 +68,6 @@ const guildId = Math.floor(interaction.guild.id / 100) * 100;
             .addComponents(
                 realmselectmenu,
             );
-        try {
-            if (authFiles === undefined || authFiles.length === 0) {
-                return interaction.editReply({ embeds: [notsetupmain], ephemeral: true });
-            }
             if (authFilesBot === undefined || authFilesBot.length === 0) {
                 return interaction.editReply({ embeds: [notsetupbot], ephemeral: true });
             }
@@ -113,6 +112,7 @@ const guildId = Math.floor(interaction.guild.id / 100) * 100;
         if (response.data.id != i.values[0]) {
             return interaction.editReply({ embeds: [notownedrealm], components: [], ephemeral: true });
         }
+    }
         const joining = new EmbedBuilder()
         .setTitle('Realm Join')
         .setDescription(`Joining ${response.data.name}`)
@@ -130,9 +130,24 @@ const guildId = Math.floor(interaction.guild.id / 100) * 100;
             .setDescription(`Successfully Joined ${response.data.name} As ${client.username}`)
             interaction.editReply({ embeds: [joined], components: [], ephemeral: true });
         })
-                }
+        let euid
+        client.on("start_game", (packet) => {
+euid = packet.entity_id
+        })
+        client.on("update_abilities", (packet) => {
+if (euid === packet.entity_unique_id) {
+    if (packet.permission_level !== "Operator") {
+        const missingperms = new EmbedBuilder()
+        .setTitle('Realm Join')
+        .setDescription(`The Bot Is Not Operator. Please Give Operator To ${client.username} And Rerun This Command.`)
+        client.disconnect(`Missing Perms: ${client.username}`)
+        return interaction.editReply({ embeds: [missingperms], components: [], ephemeral: true });
+    }
+}
+        })
+                })
 
-            })
+        }
             collector.on('end', collected => {
                 if (collected.size === 0) {
                     collector.stop()

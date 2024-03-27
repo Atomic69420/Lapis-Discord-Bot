@@ -29,11 +29,11 @@ function createPartbp(realmcode, guildId) {
 			data.records.records.forEach((packet) => {
 				if (packet.build_platform != 12 && packet.platform_chat_id.length != 0) {
 					// console.log(`[${packet.xbox_user_id}] Not on NintendoSwitch & has Platform Chat ID. [T1]`);
-					client.command(`kick "${packet.xbox_user_id}" [${config.prefix}]\n[${config.prefix}]\nInvaild information sent. (0x3f1)`, 0)
+					client.command(`kick "${packet.xbox_user_id}" [${config.prefix}]\nInvaild information sent. (0x3f1)`, 0)
 				}
 				if (!isValidPlatformChatId(packet.platform_chat_id) && packet.build_platform === 12) {
 					// console.log(`[${packet.xbox_user_id}] Invaild Platform Chat ID. [T2]`);
-					client.command(`kick "${packet.xbox_user_id}" [${config.prefix}]\n[${config.prefix}]\nInvaild information sent. (0x3f2)`, 0)
+					client.command(`kick "${packet.xbox_user_id}" [${config.prefix}]\nInvaild information sent. (0x3f2)`, 0)
 				}
 				if (!packet.skin_data.skin_id.includes(packet.skin_data.play_fab_id)) {
 					// console.log(`[${packet.xbox_user_id}] Bad skin information [T1]`);
